@@ -1,10 +1,10 @@
-
 %{
 
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
 #include "lang.h"
+#include "config.h"
 #include "hc.h"
 
 

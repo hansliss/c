@@ -1,0 +1,33 @@
+AC_INIT(c.c)
+PRODUCT=c
+VERSION=1.1
+AC_CONFIG_HEADER(config.h)
+AC_DEFINE_UNQUOTED(PRODUCT, "$PRODUCT")
+AC_DEFINE_UNQUOTED(VERSION, "$VERSION")
+AC_SUBST(PRODUCT)
+AC_SUBST(VERSION)
+
+dnl Checks for programs.
+AC_PROG_CC
+AC_PROG_INSTALL
+AC_PROG_LN_S
+AC_PROG_LEX
+AC_PROG_YACC
+
+dnl Checks for libraries.
+
+dnl Checks for header files.
+AC_HEADER_STDC
+AC_CHECK_HEADERS(limits.h unistd.h netinet/in.h netdb.h arpa/inet.h)
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+AC_DECL_YYTEXT
+
+dnl Checks for library functions.
+AC_TYPE_SIGNAL
+AC_LIBRARY_NET
+
+##AC_CHECK_FUNCS()
+
+AC_OUTPUT(Makefile)

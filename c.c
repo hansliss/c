@@ -5,6 +5,9 @@
 #include <fcntl.h>
 #include <string.h>
 #include <math.h>
+
+#include "config.h"
+
 char *id_name[MAX_ID];
 double id_val[MAX_ID];
 char *intxt;
