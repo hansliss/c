@@ -149,20 +149,22 @@ int main(int argc,char *argv[])
  nextvar=0;
  if ((varfile=fopen(VARFILE,"r"))!=NULL)
    {
-     fgets(inbuf,80,varfile);
-     while (!feof(varfile) && (nextvar<MAX_ID))
-       {
-	 p1=(char*)strchr(inbuf,'=');
-	 if (p1)
-	   {
-	     *(p1++)='\0';
-	     id_name[nextvar]=(char *)malloc(strlen(inbuf)+1);
-	     strcpy(id_name[nextvar],inbuf);
-	     sscanf(p1,"%lf",&(id_val[nextvar]));
-	     nextvar++;
-	   }
-	 fgets(inbuf,80,varfile);
-       }
+     if (fgets(inbuf,80,varfile) != NULL) {
+       while (!feof(varfile) && (nextvar<MAX_ID))
+	 {
+	   p1=(char*)strchr(inbuf,'=');
+	   if (p1)
+	     {
+	       *(p1++)='\0';
+	       id_name[nextvar]=(char *)malloc(strlen(inbuf)+1);
+	       strcpy(id_name[nextvar],inbuf);
+	       sscanf(p1,"%lf",&(id_val[nextvar]));
+	       nextvar++;
+	     }
+	   if (!fgets(inbuf,80,varfile))
+	     perror("reading from " VARFILE);
+	 }
+     } else perror("reading from " VARFILE);
      fclose(varfile);
    }
  yyparse();
