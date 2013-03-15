@@ -63,7 +63,7 @@ scan.c : scan.l lang.h hc.h
 	mv $(LEX_OUTPUT_ROOT).c scan.c
 
 clean:
-	/bin/rm -f $(TARGET) *.o core lang.c lang.h scan.c y.output
+	/bin/rm -f $(TARGET) *.o core lang.c lang.h scan.c y.output $(PRODUCT)-$(VERSION)-*.tar.gz*
 
 distclean: clean config-clean
 
@@ -72,7 +72,7 @@ config-clean: confclean-recursive
 confclean-recursive: cfg-clean
 
 cfg-clean:
-	/bin/rm -f Makefile config.h config.status config.cache config.log $(PRODUCT)-$(VERSION)-*.tar.gz*
+	/bin/rm -f Makefile config.h config.status config.cache config.log
 
 mostlyclean: clean
 
