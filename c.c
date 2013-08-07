@@ -13,6 +13,7 @@ double id_val[MAX_ID];
 char *intxt;
 int intxtptr,intxtlen;
 int rval;
+extern double last_val;
 
 #ifdef YYDEBUG
  extern int yydebug;
@@ -181,5 +182,9 @@ int main(int argc,char *argv[])
    }
  if (intxt)
   free(intxt);
+ if (rval == 0) {
+   if (last_val) rval=0;
+   else rval=1;
+ }
  return rval;
 }

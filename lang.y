@@ -7,8 +7,8 @@
 #include "hc.h"
 
 extern char *yytext;
-
 extern void yyerror(char *);
+double last_val;
 
 %}
 
@@ -32,6 +32,7 @@ extern void yyerror(char *);
 %left ASSIGN
 %left OR AND
 %left '<' '>'
+%left NEQ LEQ GEQ
 %left '='
 %left '+' '-'
 %left '*' '/' 
@@ -47,7 +48,7 @@ lines
   | lines stmt
 	;
 
-stmt : expr ENDOFLINE  { printf("%g\n",$1); }
+stmt : expr ENDOFLINE  { printf("%g\n",$1); last_val=$1; }
   | '?' ENDOFLINE { printf("Calcer version 2.00 - Hans Liss 1994 - 2000\n"); }
   | error ENDOFLINE { printf("Syntax error\n"); }
      ;
@@ -64,6 +65,9 @@ expr
 	| expr '=' expr { $$ = $1 == $3; }
 	| expr OR expr { $$ = $1 || $3; }
 	| expr AND expr { $$ = $1 && $3; }
+	| expr NEQ expr { $$ = $1 != $3; }
+	| expr LEQ expr { $$ = $1 <= $3; }
+	| expr GEQ expr { $$ = $1 >= $3; }
 	| '-' expr %prec UNARYMINUS {  $$ = - $2; }
 	| NOT expr {  $$ = ! $2; }
 	| '(' expr ')' { $$ = $2; }

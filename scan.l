@@ -25,6 +25,9 @@ int do_func();
 AND	[aA]+[nN]+[dD]
 OR	[oO]+[rR]
 NOT	[nN]+[oO]+[tT]
+NEQ	!=
+LEQ	<=
+GEQ	>=
 REAL	[0-9]+[.][0-9]*([Ee][+-]*[0-9]+)?
 REAL2	[0-9]+[Ee][+-]*[0-9]+
 RHEX	0x[0-9a-fA-F]*[.][0-9a-fA-F]*
@@ -52,12 +55,16 @@ pi			{ yylval.d = M_PI; return INUM; }
 {OR}			return OR;
 {AND}			return AND;
 {NOT}			return NOT;
+{NEQ}			return NEQ;
+{LEQ}			return LEQ;
+{GEQ}			return GEQ;
 
 {ID}			return do_id();
 {FUNC}			return do_func();
 
 \>\>			return '>';
 \<\<			return '<';
+
 \004			return 0;
 \[	      return '(';
 \]	      return ')';
