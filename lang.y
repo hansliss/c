@@ -35,7 +35,7 @@ double last_val;
 %left NEQ LEQ GEQ
 %left '='
 %left '+' '-'
-%left '*' '/' 
+%left '*' '/' '%'
 %left UNARYMINUS
 %left NOT
 
@@ -60,6 +60,7 @@ expr
 	| expr '-' expr { $$ = $1 - $3; }
 	| expr '*' expr {  $$ = $1 * $3; }
 	| expr '/' expr {  $$ = $1 / $3; }
+        | expr '%' expr {  $$ = (long)$1 % (long)$3; }
 	| expr '<' expr { $$ = $1 < $3; }
 	| expr '>' expr { $$ = $1 > $3; }
 	| expr '=' expr { $$ = $1 == $3; }
