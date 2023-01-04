@@ -11,7 +11,7 @@
 #undef input
 #undef unput
 int do_real();
-static int hex2dec();
+static int hex2dec(char c);
 int do_rhex();
 int do_dec();
 int do_hex();
@@ -39,6 +39,8 @@ BIN	0b[0-1]*
 ID	[a-zA-Z_][a-zA-Z0-9_]*
 FUNC	&[a-zA-Z0-9_]*
 
+PREC    #
+
 %%
 
 {REAL}			return do_real();
@@ -61,6 +63,7 @@ pi			{ yylval.d = M_PI; return INUM; }
 
 {ID}			return do_id();
 {FUNC}			return do_func();
+{PREC}                  return PREC;
 
 \>\>			return '>';
 \<\<			return '<';
@@ -78,61 +81,27 @@ pi			{ yylval.d = M_PI; return INUM; }
 
 %%
 
-int do_real()
-{
+int do_real() {
   sscanf(yytext, "%lf", &yylval.d);
   return INUM;
 }
 
-static int hex2dec(c)
-char c;
-{
-  switch (c)
-  {
-    case '0':
-    case '1':
-    case '2':
-    case '3':
-    case '4':
-    case '5':
-    case '6':
-    case '7':
-    case '8':
-    case '9':
-      return c-'0';
-    case 'a':
-    case 'b':
-    case 'c':
-    case 'd':
-    case 'e':
-    case 'f':
-      return c-'a'+10;
-    case 'A':
-    case 'B':
-    case 'C':
-    case 'D':
-    case 'E':
-    case 'F':
-      return c-'A'+10;
-  }
-  return 0;
+static int hex2dec(char c) {
+  return (c < '9')?(c - '0'):((c & 0x5F) - 'A' + 10);
 }
 
-int do_rhex()
-{
+int do_rhex() {
   double scale;
   char *cp = yytext + 2;
   yylval.d = 0.0;
-  while (*cp != '.')
-  {
-    yylval.d *= 10.0;
+  while (*cp != '.') {
+    yylval.d *= 16.0;
     yylval.d += hex2dec(*cp);
     cp++;
   }
   cp++;
   scale = 1.0 / 16.0;
-  while (*cp)
-  {
+  while (*cp) {
     yylval.d += scale * hex2dec(*cp);
     scale /= 16.0;
     cp++;
@@ -140,32 +109,28 @@ int do_rhex()
   return INUM;
 }
 
-int do_dec()
-{
+int do_dec() {
   int tmp;
   sscanf(yytext, "%d", &tmp);
   yylval.d = tmp;
   return INUM;
 }
 
-int do_hex()
-{
+int do_hex() {
   unsigned tmp;
   sscanf(yytext+2, "%x", &tmp);
   yylval.d = tmp;
   return INUM;
 }
 
-int do_oct()
-{
+int do_oct() {
   unsigned tmp;
   sscanf(yytext, "%o", &tmp);
   yylval.d = tmp;
   return INUM;
 }
 
-int do_bin()
-{
+int do_bin() {
   int rv=0;
   char *yp;
   for (yp = yytext+2; *yp; yp++)
@@ -177,19 +142,15 @@ int do_bin()
   return INUM;
 }
 
-int do_id()
-{
+int do_id() {
   int i;
-  for (i=0; i<MAX_ID; i++)
-  {
-    if (id_name[i] == 0)
-    {
+  for (i=0; i<MAX_ID; i++) {
+    if (id_name[i] == 0) {
       id_name[i] = strdup(yytext);
       yylval.i = i;
       return ID;
     }
-    if (strcmp(id_name[i], yytext) == 0)
-    {
+    if (strcmp(id_name[i], yytext) == 0) {
       yylval.i = i;
       return ID;
     }
@@ -198,15 +159,14 @@ int do_id()
   return 1; /* forced error */
 }
 
-int do_func()
-{
+int do_func() {
   int i;
-  for (i=0; i < known_funcs(); i++)
-    if (!strcasecmp(func_name[i], yytext))
-    {
+  for (i=0; i < known_funcs(); i++) {
+    if (!strcasecmp(func_name[i], yytext)) {
       yylval.i = i;
       return FUNC;
     }
+  }
   printf("Unimplemented function %s\n", yytext);
   return 1; /* forced error */
 }
