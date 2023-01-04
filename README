@@ -1,1 +1,13 @@
 A small and simple lex/yacc based calculator that can handle floats.
+
+Supports basic arithmetic and logic functions, with PEMDAS precedence rules.
+Supports decimal, octal, hex and binary numbers (prefix with "0", "0x" and "0b", respectively)
+Supports hexadecimal real numbers
+Supports functions, using "&" as a function prefix:
+	 &sin(), &cos(), &sqrt(), &tan(), &atan(), &log(), &ln(), &log2()
+Supports variables, using ":=" for assignment, and with support for persistent variable values
+"e" and "pi" are available as constants.
+Supports setting the decimal precision för output, using the pseudo-function "#": #(2, 1+1)
+
+
+Please keep in mind that this code is incredibly old.
