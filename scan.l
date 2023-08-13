@@ -87,7 +87,7 @@ int do_real() {
 }
 
 static int hex2dec(char c) {
-  return (c < '9')?(c - '0'):((c & 0x5F) - 'A' + 10);
+  return (c <= '9')?(c - '0'):((c & 0x5F) - 'A' + 10);
 }
 
 int do_rhex() {
